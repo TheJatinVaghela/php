@@ -61,6 +61,15 @@ echo "For x <> y, the result is ";
 echo var_dump($x <> $y);
 echo "<br>";
 
+// Devloper Option 
+$name = ["Name1","Name2","Name3",1,2,3,true,false];
+echo "<pre>";
+print_r($name);
+var_dump($name);
+var_export($name);
+echo "</pre>";
+
+
 
 // 4. Logical Operators
 

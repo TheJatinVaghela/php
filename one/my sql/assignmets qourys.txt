@@ -1,0 +1,24 @@
+CREATE table employe
+(
+   id int PRIMARY KEY  AUTO_INCREMENT,
+   first varchar(50),
+   last varchar(40),
+   salary int,
+   joinDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   deoartment varchar(50)
+)
+
+INSERT into employe(first,last,salary,deoartment) values("one","onelast",1000,"frontend")
+INSERT into employe(first,last,salary,deoartment) values("two","twolast",2000,"frontend"),
+("three","threelast",3000,"frontend"),
+("four","4last",4000,"frontend"),
+("five","%_5_last",5000,"frontend")
+
+create TABLE incentive
+(
+	incentive_id int PRIMARY key AUTO_INCREMENT,
+    EMP_ID int,
+ 	FOREIGN KEY(EMP_ID) REFERENCES employe(id),
+    incentive_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+    incentive_amount int
+)

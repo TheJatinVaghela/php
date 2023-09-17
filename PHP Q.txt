@@ -1,0 +1,78 @@
+The header() function sends a raw HTTP header to a client.
+
+The print_r() function prints the information about a variable in a more human-readable way.
+
+The var_dump() function dumps information about one or more variables. The information holds type and value of the variable(s).
+
+The var_export() function outputs or returns structured information about a variable.
+This function works similar to var_dump(), except that the returned value for this function is valid PHP code.
+
+isset (it checks wheather it exists or not);
+
+enctype="multipart/form-data" ( to get file's all things)
+
+The array_chunk() function splits an array into chunks of new arrays.
+
+(  array_column ) https://www.w3schools.com/Php/func_array_column.asp
+
+array_combine() Create an array by using the elements from one "keys" array and one "values" array:
+
+The array_merge() function merges one or more arrays into one array.
+
+he array_merge_recursive() function merges one or more arrays into one array.
+The difference between this function and the array_merge() function is when two or more array elements have the same key. Instead of override the keys, the array_merge_recursive() function makes the value as an array.
+
+The count() function returns the number of elements in an array.
+
+The sizeof() function returns the number of elements in an array.
+The sizeof() function is an alias of the count() function.
+
+The array_filter() function filters the values of an array using a callback function.
+This function passes each value of the input array to the callback function. If the callback function returns true, the current value from input is returned into the result array. Array keys are preserved.
+
+The array_keys() function returns an array containing the keys.
+
+The array_key_exists() function checks an array for a specified key, and returns true if the key exists and false if the key does not exist.
+
+The in_array() function searches an array for a specific value.
+
+The array_search() function search an array for a value and returns the key.
+
+The array_intersect() function compares the values of two (or more) arrays, and returns the matches.
+This function compares the values of two or more arrays, and return an array that contains the entries from array1 that are present in array2, array3, etc.
+
+The array_intersect_assoc() function compares the keys and values of two (or more) arrays, and returns the matches.
+This function compares the keys of two or more arrays, and return an array that contains the entries from array1 that are present in array2, array3, etc.
+
+The array_intersect_key() function compares the keys of two (or more) arrays, and returns the matches.
+This function compares the keys of two or more arrays, and return an array that contains the entries from array1 that are present in array2, array3, etc.
+
+The array_pop() function deletes the last element of an array
+
+The array_push() function inserts one or more elements to the end of an array.
+
+The array_reduce() function sends the values in an array to a user-defined function, and returns a string.
+
+The shuffle() function randomizes the order of the elements in the array.
+
+The addslashes() function returns a string with backslashes in front of predefined characters.
+The predefined characters are:
+single quote (')
+double quote (")
+backslash (\)
+NULL
+
+The bin2hex() function converts a string of ASCII characters to hexadecimal values. The string can be converted back using the pack() function.
+
+echo md5($password); // it is a one way encryption you cannot decrypt
+
+The base64_encode() function is an inbuilt function in PHP that is used to encode data with MIME base64. MIME (Multipurpose Internet Mail Extensions) base64 is used to encode the string in base64. The base64_encoded data takes 33% more space than the original data. 
+
+The base64_decode() is an inbuilt function in PHP which is used to Decodes data which is encoded in MIME base64.
+
+The stristr() function searches for the first occurrence of a string inside another string.
+
+The chunk_split() function splits a string into a series of smaller parts.
+Note: This function does not alter the original string.
+Syntax:-
+chunk_split(string,length,end)

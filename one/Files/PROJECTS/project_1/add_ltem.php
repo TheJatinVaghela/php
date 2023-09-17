@@ -18,7 +18,7 @@
             <input class="feild quantity" id="item_quantity" type="text" name="item_quantity" placeholder="item_quantity" require>
             <input class="feild category" id="item_category" type="text" name="item_category" placeholder="item_category" require>
             <input class="feild image" id="item_image" type="text" name="item_image" placeholder="item_image" require>
-            <input id="Add_item_submit" onclick="Add()" type="submit" value="submit">
+            <input id="Add_item_submit" type="submit" value="submit">
         
 </body>
 </html>

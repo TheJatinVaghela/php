@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>list page</h1>
-    <button onclick="Show_list()">Show list</button>
+    <button id="Show_List">Show list</button>
      <div id="LIST_Wrapper">
         
     </div> 

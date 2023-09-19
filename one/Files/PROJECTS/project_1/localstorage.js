@@ -24,21 +24,21 @@ function Add() {
     const item_category = document.getElementById('item_category');
     const item_image = document.getElementById('item_image');
 
-  
+  console.log(item_image);
     // e.preventDefault();
-    let list={
+ /*   let list={
         "item_name" : item_name.value,
         "item_price" : item_price.value,
         "item_description" : item_description.value,
         "item_quantity" : item_quantity.value,
         "item_category" : item_category.value,
         "item_image" : item_image.value
-    };
+    }; */
    
     
-    List_Arrey.push(list);
-    Save_Local(List_Arrey);
-   window.location.replace("./list.php");
+   // List_Arrey.push(list);
+   // Save_Local(List_Arrey);
+    //window.location.replace("./list.php");
    
 };
 
@@ -58,7 +58,7 @@ function Show_list() {
                     <p  contenteditable="false" class="A_${i}card-text item_description">${e.item_description}</p>
                     <p  contenteditable="false" class="A_${i}card-text item_quantity">${e.item_quantity}</p>
                     <p  contenteditable="false" class="A_${i}card-text item_category">${e.item_category}</p>
-                    <p  contenteditable="false" class="A_${i}card-text item_image">${e.item_image}</p>
+                   <!-- <p  contenteditable="false" class="A_${i}card-text item_image">${e.item_image}</p>  -->
                     <button id="EDIT" class="btn btn-primary" onclick="EDIT(this)">Edit</button>
                     <button id="DEL" class="btn btn-danger" onclick="DELETE(this)">Delete</button>
                 </div>

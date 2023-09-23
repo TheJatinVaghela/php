@@ -12,38 +12,41 @@ function Save_Local(Arrey) {
 }
 
 
-let Add_item_submit = document.getElementById('Add_item_submit');
-(Add_item_submit !== null )? Add_item_submit.addEventListener('click',Add) : console.log("");
-
+ let Add_item_submit = document.getElementById('Add_item_submit');
+  (Add_item_submit !== null )? Add_item_submit.addEventListener('click',Add) : console.log("");
+ Add_item_submit.onclick=Add();
 function Add() {
-   
+    // console.log("Add");
+    // console.log(sessionStorage);
+    
+  
+
     const item_name = document.getElementById('item_name');
     const item_price = document.getElementById('item_price');
     const item_description = document.getElementById('item_description');
     const item_quantity = document.getElementById('item_quantity');
     const item_category = document.getElementById('item_category');
-    const item_image = document.getElementById('item_image');
+     const item_image = document.getElementById('item_image');
 
-  console.log(item_image);
-    // e.preventDefault();
- /*   let list={
-        "item_name" : item_name.value,
-        "item_price" : item_price.value,
-        "item_description" : item_description.value,
-        "item_quantity" : item_quantity.value,
-        "item_category" : item_category.value,
-        "item_image" : item_image.value
-    }; */
+ let list={
+      "item_name" : item_name.value,
+      "item_price" : item_price.value,
+      "item_description" : item_description.value,
+      "item_quantity" : item_quantity.value,
+      "item_category" : item_category.value,
+      "item_image" : item_image.value
+  }; 
    
+
+  List_Arrey.push(list);
+  Save_Local(List_Arrey); 
+
     
-   // List_Arrey.push(list);
-   // Save_Local(List_Arrey);
-    //window.location.replace("./list.php");
-   
 };
 
 let Show_List = document.getElementById('Show_List');
-Show_List.addEventListener('click',Show_list);
+(Show_List !== null )? Show_List.addEventListener('click',Show_list) : console.log("");
+
 
 function Show_list() {
     const LIST_Wrapper = document.getElementById('LIST_Wrapper');
@@ -139,3 +142,4 @@ function DELETE(e) {
      List_Arrey.splice(0,1);
      Save_Local(List_Arrey);
 }
+

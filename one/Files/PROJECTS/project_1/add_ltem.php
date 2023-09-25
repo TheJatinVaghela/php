@@ -31,7 +31,7 @@ session_start();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>add_item</title>
   
-      <!-- <script src="./localstorage.js" defer></script> -->
+      <script src="./localstorage.js" defer></script>
 </head>
 <body>
 <h1>add_item</h1>
@@ -54,7 +54,7 @@ session_start();
         <?php 
         if (isset($_REQUEST['submit'])) {
               foreach($_SESSION["product"] as $key => $value) {
-               print_r($value);
+              //  print_r($value);
               //  print_r("<div class='card'><div class='card-body' id=$key><p  contenteditable='false' class='A_$key-card-text item_name'>$value[name]</p></div></div>");
                print_r( "
                   <div class='card' >

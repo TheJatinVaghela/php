@@ -69,6 +69,8 @@ function Show_list() {
     });
 };
 
+
+
 let NUM
 let PerentNode
 function EDIT(e) {
@@ -84,7 +86,7 @@ function EDIT(e) {
 
 function Add_Remove_ContentEditeble(Value) {
     if(Value == false){
-      
+       
         document.querySelectorAll(`.A_${NUM}card-text`).forEach(element => {
             element.style.border = "initial";
             element.setAttribute("contenteditable", `${Value}`);

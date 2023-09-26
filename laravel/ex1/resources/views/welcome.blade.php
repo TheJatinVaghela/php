@@ -1,3 +1,8 @@
+@php
+    $furits = ["apple", "orange", "berries", "brownies"];
+    $empty = [];
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +13,10 @@
 
 </head>
 <body>
-    <a href="{{route("POST_PAGE")}}">post page</a>
+
+    @include("pages.header",["name"=>"jatin","fruits"=>$furits]);
+
+    <a href="{{ asset('{{route(') }}"POST_PAGE")}}">post page</a>
     {{-- {{THis is comment}} --}}
     {{"HELLOW WORD"}}
     <br>
@@ -33,5 +41,7 @@
 
         @endforeach
     </ul>
+
+    @include("pages/footer",["sername"=>"vaghela","something"=>$empty]);
 </body>
 </html>

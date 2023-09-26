@@ -46,3 +46,7 @@ Route::prefix('post')->group(function(){
 Route::fallback(function(){
     return "<h1>This Page Does Not Exits </h1>";
 });
+
+// Route::get('/hola',function(){
+//     return view("pages/header");
+// });

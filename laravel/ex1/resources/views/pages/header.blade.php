@@ -7,3 +7,7 @@
     @endforeach
 
 </ul>
+
+{{-- @section('title')
+    header
+@endsection --}}

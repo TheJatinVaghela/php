@@ -6,4 +6,13 @@
     @empty
         <li>no value found</li>
     @endforelse
+
+    {{-- @extends('welcome') --}}
+    {{-- @section('content')
+        <h1>From section</h1>
+    @endsection --}}
+
+    {{-- @section('title')
+      footer
+    @endsection --}}
 </ul>

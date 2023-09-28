@@ -10,13 +10,13 @@
     <meta name="viewport" content="width=\, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document - @yield('title','defualt value')</title>
-
+     @stack('style')
 </head>
 <body>
 
     @include("pages.header",["name"=>"jatin","fruits"=>$furits]);
 
-    <a href="{{ asset('{{route(') }}"POST_PAGE")}}">post page</a>
+    <a href={{"POST_PAGE"}}>post page</a>
     {{-- {{THis is comment}} --}}
     {{"HELLOW WORD"}}
     <br>
@@ -57,11 +57,14 @@
     @includeUnless(add(1,1,0),"pages.header",["name"=>"jatin1"] )
 
    {{-- //it will chack that 1+1 = 2  is true or false and if false it will not use the file if true it will use the file --}}
-    @includeWhen(add(1,1,2), "pages/footer",["sername"=>"vaghela2","something"=>$empty])
-    @hasSection('content')
+    {{-- @includeWhen(add(1,1,2), "pages/footer",["sername"=>"vaghela2","something"=>$empty]) --}}
+    {{--@hasSection('content')
         @yield('content')
     @else
         <h2>No Content Fount</h2>
     @endif
+    --}}
+    @stack('javascripts')
+
 </body>
 </html>

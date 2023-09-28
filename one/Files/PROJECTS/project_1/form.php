@@ -11,16 +11,11 @@
             }
     ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>seller form</title>
   
       <!-- <script src="./localstorage.js" defer></script> -->
-</head>
-<body>
+
     <form  action="./add_ltem.php" method="post" enctype="multipart/form-data">
         <h1>SELLER FORM</h1>
         <br>
@@ -35,7 +30,3 @@
         
         
 
-
-    </form>
-</body>
-</html>

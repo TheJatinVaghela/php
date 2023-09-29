@@ -10,8 +10,9 @@
       print_r ($_FILES);
       echo "</pre>";
         $Storge = "F:/Xampp/xammp/htdocs/php/one/Files/PROJECTS/project_1/Storage/";
-        $id= uniqid().time();
         $img_name = $_FILES["item_image"]["name"];
+        $id='';
+        if($img_name != null){$id= uniqid().time();}
         move_uploaded_file($_FILES["item_image"]["tmp_name"],$Storge.$id.$img_name);
        $_SESSION["product"][] =["name"=>$_REQUEST["item_name"],"description"=>$_REQUEST["item_description"],
                                 "price"=>$_REQUEST["item_price"],"item_quantity"=>$_REQUEST["item_quantity"],
@@ -24,11 +25,10 @@
      
   }
  ?>
-
-
+    
 <h1>add_item</h1>
        
-       <form action="" method="post" enctype="multipart/form-data">
+       <form  method="post" enctype="multipart/form-data" >
            
            <input class="feild price" id="item_name" type="text" name="item_name" placeholder="item_name" require>
            <input class="feild price" id="item_price" type="text" name="item_price" placeholder="item_price" require>
@@ -42,42 +42,15 @@
        </form>
 <hr>
        <!-- <button id="Show_List">Show list</button> -->
-     <div id="LIST_Wrapper">
+    
+       <?php
+  if (isset($_REQUEST['submit']) && $_SESSION["product"]) {
+      echo "<pre>"; 
+      print_r($_SESSION["product"]);
+       echo "</pre>"; 
+       header("Location: list.php");
+   };
+  ?>
 
-        <?php 
-        if (isset($_REQUEST['submit'])) {
-              foreach($_SESSION["product"] as $key => $value) {
-              //  print_r($value);
-              //  print_r("<div class='card'><div class='card-body' id=$key><p  contenteditable='false' class='A_$key-card-text item_name'>$value[name]</p></div></div>");
  
-               print_r( "
-               <form action=' method='post' enctype='multipart/form-data'>
-                  <div class='card' >
-                    <div class='card-body' id='$key'>
-                      <p  contenteditable='false' class='A_$key-card-text item_name'>$value[name]</p>
-                      <input type='hidden' value='$value[name]'>
-                      <img src='./Storage/$value[item_img_name]' alt='IMG NOT FOUND'>
-                      <input type='hidden' value='$value[item_img_name]'>
-                      <p  contenteditable='false' class='A_$key-card-text item_price'>$value[price]</p>
-                      <input type='hidden' value='$value[price]'>
-                      <p  contenteditable='false' class='A_$key-card-text item_description'>$value[description]</p>
-                      <input type='hidden' value='$value[description]'>
-                      <p  contenteditable='false' class='A_$key-card-text item_quantity'>$value[item_quantity]</p>
-                      <input type='hidden' value='$value[item_quantity]'>
-                      <p  contenteditable='false' class='A_$key-card-text item_category'>$value[item_category]</p>
-                      <input type='hidden' value='$value[item_category]'>
-                    
-                      <button id='EDIT' class='btn btn-primary' onclick='EDIT(this) name='Edit'>Edit</button>
-                      <button id='DEL' class='btn btn-danger' onclick='DELETE(this) name='Delete''>Delete</button>
-                    </div>
-                  </div>
-                </form>
-                  <hr/>"); 
-                
-              };
-         } 
-         ?>
-    </div> 
-
   
-        

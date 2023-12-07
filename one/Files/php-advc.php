@@ -297,7 +297,299 @@ $class->iterateVisible();
 
 <!--Use of The $this keyword in php  -->
 <!--
-    In PHP, $this is a reserved keyword that refers to the calling object1. It is usually the object to which the method belongs, but it could also be another object if the method is called statically from the context of a secondary object1. This keyword is only applicable to internal methods1
+   In PHP, the $this keyword is used within a class to refer to the current object. It’s a reference to the calling object,
+   which is the instance of the class where the method is currently being executed
 -->
 
-<!--  -->
+<!-- Create Hotel Room Booking System User can book room by 3 ways  -->
+<?php 
+// hotel_booking.php
+
+// Database connection code
+$host = 'localhost';
+$dbname = 'HotelBooking';
+$username = 'root';
+$password = ''; 
+$conn = new mysqli($host, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Function to check room availability
+function isRoomAvailable($conn, $date, $slot) {
+    $stmt = $conn->prepare("SELECT * FROM RoomBookings WHERE date = ? AND slot = ? AND status = 'available'");
+    $stmt->bind_param("ss", $date, $slot);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->num_rows > 0;
+}
+
+// Function to validate date and slot input
+function validateInput($date, $slot) {
+    $errors = array();
+    if (empty($date)) {
+        $errors['date'] = 'Date is required.';
+    }
+    if (empty($slot)) {
+        $errors['slot'] = 'Slot selection is required.';
+    }
+    return $errors;
+}
+
+// Function to book a room
+function bookRoom($conn, $date, $slot) {
+    $stmt = $conn->prepare("INSERT INTO RoomBookings (date, slot, status) VALUES (?, ?, 'booked')");
+    $stmt->bind_param("ss", $date, $slot);
+    $stmt->execute();
+    return $stmt->affected_rows > 0;
+}
+
+// AJAX request handling
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
+    $action = $_POST['action'];
+    $response = array('success' => false, 'message' => '', 'errors' => array());
+
+    switch ($action) {
+        case 'check_availability':
+            $date = $_POST['date'];
+            $slot = $_POST['slot'];
+            $errors = validateInput($date, $slot);
+            if (empty($errors)) {
+                $availability = isRoomAvailable($conn, $date, $slot);
+                $response['success'] = $availability;
+                $response['message'] = $availability ? 'Room is available.' : 'Room is not available.';
+            } else {
+                $response['errors'] = $errors;
+            }
+            break;
+        case 'book_room':
+            $date = $_POST['date'];
+            $slot = $_POST['slot'];
+            $errors = validateInput($date, $slot);
+            if (empty($errors) && isRoomAvailable($conn, $date, $slot)) {
+                $bookingSuccess = bookRoom($conn, $date, $slot);
+                $response['success'] = $bookingSuccess;
+                $response['message'] = $bookingSuccess ? 'Room booked successfully.' : 'Failed to book the room.';
+            } else {
+                $response['errors'] = $errors;
+            }
+            break;
+    }
+
+    // Return JSON response
+    echo json_encode($response);
+    exit;
+}
+
+// Close the database connection
+$conn->close(); 
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel Room Booking</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Function to check room availability using AJAX
+        function checkAvailability(date, slot) {
+            $.ajax({
+                url: 'hotel_booking.php',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    action: 'check_availability',
+                    date: date,
+                    slot: slot
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message);
+
+                    } else {
+                        if (response.errors) {
+                            // Display validation errors
+                            var errorMessages = '';
+                            $.each(response.errors, function(key, value) {
+                                errorMessages += value + '\\n';
+                            });
+                            alert(errorMessages);
+                        } else {
+                            alert(response.message);
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Handle AJAX errors
+                    alert('An error occurred: ' + error);
+                }
+            });
+        }
+
+        // Event handler for checking availability
+        $('#check-availability-btn').click(function() {
+            var date = $('#date-input').val();
+            var slot = $('#slot-select').val();
+            checkAvailability(date, slot);
+        });
+
+        // Event handler for booking a room
+        $('#book-room-btn').click(function() {
+            var date = $('#date-input').val();
+            var slot = $('#slot-select').val();
+            $.ajax({
+                url: 'hotel_booking.php',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    action: 'book_room',
+                    date: date,
+                    slot: slot
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message);
+                    } else {
+                        if (response.errors) {
+                            // Display validation errors
+                            var errorMessages = '';
+                            $.each(response.errors, function(key, value) {
+                                errorMessages += value + '\\n';
+                            });
+                            alert(errorMessages);
+                        } else {
+                            alert(response.message);
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Handle AJAX errors
+                    alert('An error occurred: ' + error);
+                }
+            });
+        });
+    });
+    </script>
+</head>
+<body>
+   
+    // Booking form 
+    <form id="booking-form">
+        //Input fields for date and slot selection
+        <input type="date" id="date-input" required>
+        <select id="slot-select" required>
+            <option value="full_day">Full Day</option>
+            <option value="first_half">First Half (8AM to 6PM)</option>
+            <option value="second_half">Second Half (7PM to 7AM)</option>
+        </select>
+        <button type="button" id="check-availability-btn">Check Availability</button>
+        <button type="button" id="book-room-btn">Book Room</button>
+    </form>
+</body>
+</html> 
+
+<!-- 
+What is jQuery? :- 
+jQuery is a fast, small, and feature-rich JavaScript library. It makes things like HTML document traversal and manipulation, 
+event handling, and animation much simpler with an easy-to-use API that works across a multitude of browsers.
+
+How are JavaScript and jQuery different?:-
+JavaScript is a programming language used for web development, among other things, while jQuery is a JavaScript library that simplifies
+complex tasks from JavaScript, such as AJAX calls and DOM manipulation.
+
+Which is the starting point of code execution in jQuery?:-
+The starting point of code execution in jQuery is typically the $(document).ready() function, which runs as soon as the DOM is fully loaded.
+
+Document Load Vs Window. Load():-
+jQuery $(document).ready() is triggered when the DOM is ready for JavaScript code to execute, while $(window).load() is triggered
+when the entire page (including images, CSS, etc.) is fully loaded.
+
+What is the difference between prop and attr?
+The .prop() method gets or sets properties on DOM nodes, such as checked, disabled, or value, which can change during
+user interaction. The .attr() method gets or sets attributes defined by HTML, such as id, class, or style.
+
+Explain Difference Between JQuery And JavaScript?
+jQuery is a library built with JavaScript to provide an easier interface for web development tasks like animations, AJAX calls, and 
+DOM manipulation. JavaScript is the underlying language that can be used without any libraries.
+
+How We Can Select The Specified <li> Element From The List Of <li> Elements In <ul>?:-
+You can select a specified <li> element by using its index within the <ul>, like so: $('ul li:eq(index)'), where index is the zero-based 
+index of the <li>.
+
+In <table> Design Change The Color Of Even <tr> Elements To “green” And Change The Color Of Odd <tr> Elements To “blue” Color?
+Give An Example Code?:-{ 
+JavaScript
+$(document).ready(function(){
+    $('table tr:even').css('background-color', 'green');
+    $('table tr:odd').css('background-color', 'blue');
+});  }
+
+i) How We Can Implement Animation Effects In jQuery?
+You can implement animation effects in jQuery using the .animate() method, which allows you to animate CSS properties
+over a specified duration.
+
+j) Apply jQuery validation using library.
+To apply jQuery validation, you can use the jQuery Validation Plugin and initialize it on a form like so:-{
+
+JavaScript
+$(document).ready(function(){
+    $('#myForm').validate();
+}); }
+
+k) Create custom dynamic function for require field validator.:- {
+
+JavaScript
+$.validator.addMethod('customRequired', function(value, element) {
+    return value.trim() !== '';
+}, 'This field is required.');
+
+$(document).ready(function(){
+    $('#myForm').validate({
+        rules: {
+            myField: {
+                customRequired: true
+            }
+        }
+    });
+});  }
+
+l) Get state data by country selection (Ajax).:-{
+
+JavaScript
+$(document).ready(function(){
+    $('#countrySelect').change(function(){
+        var countryId = $(this).val();
+        $.ajax({
+            url: 'getStateData.php',
+            type: 'GET',
+            data: { countryId: countryId },
+            dataType: 'json',
+            success: function(states){
+                // Populate state select box with received state data
+            }
+        });
+    });
+});   }
+
+
+m) Image uploading with preview :- {
+
+JavaScript
+$(document).ready(function(){
+    $('#imageInput').change(function(){
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#imagePreview').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+});  }
+ -->
+
+
+

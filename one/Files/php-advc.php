@@ -300,7 +300,505 @@ $class->iterateVisible();
    In PHP, the $this keyword is used within a class to refer to the current object. It’s a reference to the calling object,
    which is the instance of the class where the method is currently being executed
 -->
+<!-- 
+    Consider the exercise11and add a edit link near delete link e.g. Clicking up on edit
+button a particular row should be open in editing mode
+e.g. on the Particular row there should be filled text box with data and on the option
+column there should be a confirm button clicking upon it arrow should be updated.
 
+ans:-
+<!-- CODE -->
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "input_assigment";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+
+$fetch_query = "SELECT * FROM info WHERE id='1'";
+$result = $conn->query($fetch_query);
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $existing_data = array(
+        "name" => $row["name"],
+        "Password" => $row["password"],
+        "ComfermPassword" => $row["confirm_password"],
+        "Salutation" => $row["salutation"],
+        "MiddleName" => $row["middle_name"],
+        "Ragident_Status" => $row["resident_status"],
+        "email" => $row["email"],
+        "FirstName" => $row["first_name"],
+        "LastName" => $row["last_name"],
+        "Country" => $row["country"],
+        "Mo_Nmber" => $row["phone_number"],
+        "Ac_Num" => $row["account_number"],
+        "Niick_Name" => $row["nickname"],
+        "FundTranf" => $row["fund_transfer"]
+    );
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["delete"])) {
+        $login_id = 1;
+        $delete_query = "DELETE FROM info WHERE id='$login_id'";
+        $conn->query($delete_query);
+    } elseif (isset($_POST["editSubmit"])) {
+        $login_id = 1;
+        $field_to_edit = $_POST["editField"];
+        $new_value = $_POST["editValue"];
+        // print_r($_POST);
+        $update_query = "UPDATE info SET $field_to_edit='$new_value' WHERE id='$login_id'";
+        print_r($update_query);
+        $conn->query($update_query);
+    } else {
+        $login_id = 1;
+        $password = $_POST["Password"];
+        $confirm_password = $_POST["ComfermPassword"];
+        $salutation = $_POST["Salutation"];
+        $middle_name = $_POST["MiddleName"];
+        $resident_status = $_POST["Ragident_Status"];
+        $email = $_POST["email"];
+        $first_name = $_POST["FirstName"];
+        $last_name = $_POST["LastName"];
+        $country = $_POST["Country"];
+        $phone_number = $_POST["Mo_Nmber"];
+        $account_number = $_POST["Ac_Num"];
+        $nickname = $_POST["Niick_Name"];
+        $fund_transfer = $_POST["FundTranf"];
+
+        $check_query = "SELECT * FROM info WHERE id='$login_id'";
+        $result = $conn->query($check_query);
+
+        if ($result->num_rows > 0) {
+            $update_query = "UPDATE info SET password='$password', confirm_password='$confirm_password', salutation='$salutation', middle_name='$middle_name', resident_status='$resident_status', email='$email', first_name='$first_name', last_name='$last_name', country='$country', phone_number='$phone_number', account_number='$account_number', nickname='$nickname', fund_transfer='$fund_transfer' WHERE login_id='$login_id'";
+            $conn->query($update_query);
+        } else {
+            $insert_query = "INSERT INTO info (id, password, confirm_password, salutation, middle_name, resident_status, email, first_name, last_name, country, phone_number, account_number, nickname, fund_transfer) VALUES ('$login_id', '$password', '$confirm_password', '$salutation', '$middle_name', '$resident_status', '$email', '$first_name', '$last_name', '$country', '$phone_number', '$account_number', '$nickname', '$fund_transfer')";
+            $conn->query($insert_query);
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+    <link rel="stylesheet" href="./index.css">
+    <script src="../FormPage/index.js" defer></script>
+</head>
+<body> 
+
+<!-- ---------------------------------------- STYLE------------------------------------------------ -->
+    <style>
+        
+:root{
+    --B_T-- :  clamp(2rem, 2rem + 2vw , 7rem);
+    --B_T_3-- :  clamp(.5rem, 1rem + 2vw , 4rem);
+}
+h1{
+    background-color: blue;
+    text-align: center;
+    width: 100%;
+}
+*,*::before,*::after{
+    padding: 0%;
+    margin: 0%;
+    isolation: isolate;
+    box-sizing: border-box;
+}
+.Color_Red{
+    color: red;
+}
+body{
+    background-color: cyan;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.B_T{
+    width: 100%;
+    font-size: var(--B_T--);
+    display: block;
+}
+.B_T_3{
+    width: 100%;
+    font-size: var(--B_T_3--);
+    display: block;
+}
+.Title{
+    background-color: white;
+   height: 5rem;
+   display: flex;
+   align-items: center;
+}
+.user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-inline: 10%;
+}
+.Left{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-inline: 20%;
+}
+.Align{
+    display: flex;
+    width: 100%;
+    margin-block: .2rem;
+    /* column-gap: 1rem; */
+    gap: 1rem;
+    justify-content: flex-end;
+}
+.User_info_Wrap{
+  display: flex;
+}
+.personal{
+    
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+}
+.A_C{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+ /* Additional styles for the modal */
+.modal{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.modal-button {
+    margin-top: 10px;
+}
+    </style>
+
+<!-- ---------------------------------------- PHP------------------------------------------------ -->
+<?php
+
+print_r($_REQUEST);
+
+?>
+<!-- ---------------------------------------- HTML ------------------------------------------------ -->
+<form action="" method="post" enctype="multipart/form-data">
+    <div class="Title">
+ 
+            <h1 class="B_T Color_Red">indivisul ragistartion</h1>
+      
+    </div>
+    <div class="user">
+        <h3 class="B_T_3 Color_Red">User Perticular</h3>
+        <div class="User_info_Wrap">
+                
+                <div class="Left">
+                    <div class="Align">
+                    <label for="Login_ID">*Login ID:</label>
+                    <input  class="IN"   type="text" id="name" name="$login_id" required value="<?php echo isset($existing_data['name']) ? $existing_data['name'] : ''; ?>"><br>
+                </div>
+                <div class="Align">
+                    <label for="Password">*Password:</label>
+                    <input  class="IN"  type="Password" id="Password" name="password" required
+                    value="<?php echo isset($existing_data['Password']) ? $existing_data['Password'] : ''; ?>"
+                    ><br>
+                </div>
+                <div class="Align">
+                    <label for="ComfermPassword">*ComfermPassword:</label>
+                    <input  class="IN"  type="ComfermPassword" id="ComfermPassword" name="confirm_password" required
+                    value="<?php echo isset($existing_data['ComfermPassword']) ? $existing_data['ComfermPassword'] : ''; ?>"
+                    ><br>
+                </div>
+
+                
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <h3 class="B_T_3 Color_Red">personal Perticular</h3>
+    <br>
+    <br>
+    <br>
+    <div class="personal">
+        <div class="User_info_Wrap">
+            <div class="personal_right">
+                <div class="" style="margin-inline: 5%; display:flex;justify-content:flex-end;">
+
+                    <label for="Salutation">Salutation:</label>
+                        <select id="Salutation" name="salutation">
+                        <option value="one" <?php echo (isset($existing_data['Salutation']) && $existing_data['Salutation'] == 'one') ? 'selected' : ''; ?>>one</option>
+                        <option value="two" <?php echo (isset($existing_data['Salutation']) && $existing_data['Salutation'] == 'two') ? 'selected' : ''; ?>>two</option>
+                        <option value="three" <?php echo (isset($existing_data['Salutation']) && $existing_data['Salutation'] == 'three') ? 'selected' : ''; ?>>three</option>
+                        <option value="Four" <?php echo (isset($existing_data['Salutation']) && $existing_data['Salutation'] == 'Four') ? 'selected' : ''; ?>>Four</option>
+                        </select>
+
+                </div>
+                <div class="Align">
+                    <label for="MiddleName">*Middle Name:</label>
+                    <input class="IN"   type="text" id="MiddleName" name="middle_name" required
+                    value="<?php echo isset($existing_data['MiddleName']) ? $existing_data['MiddleName'] : ''; ?>"
+                    ><br>
+                </div>
+                <div class="" style="margin-inline: 5%; display:flex;justify-content:flex-end;">
+                    
+                    <label for="Ragident_Status">Ragident Status:</label>
+                        <select id="Ragident_Status" name="resident_status">
+                            <option value="one" <?php echo (isset($existing_data['Ragident_Status']) && $existing_data['Ragident_Status'] == 'one') ? 'selected' : ''; ?>>one</option>
+                            <option value="two" <?php echo (isset($existing_data['Ragident_Status']) && $existing_data['Ragident_Status'] == 'two') ? 'selected' : ''; ?>>two</option>
+                            <option value="three" <?php echo (isset($existing_data['Ragident_Status']) && $existing_data['Ragident_Status'] == 'three') ? 'selected' : ''; ?>>three</option>
+                            <option value="Four" <?php echo (isset($existing_data['Ragident_Status']) && $existing_data['Ragident_Status'] == 'Four') ? 'selected' : ''; ?>>Four</option>
+                        </select>
+
+                </div>
+                <div class="Align">
+                    <label for="Email_id">*Email id:</label>
+                    <input class="IN"   type="email" id="email" name="email" required
+                    value="<?php echo isset($existing_data['MiddleName']) ? $existing_data['MiddleName'] : ''; ?>"
+                    ><br>
+                </div>
+            
+               
+            </div>
+
+            <div class="personal_left">
+                <div class="Align">
+                    <label for="FirstName">*First Name:</label>
+                    <input class="IN"   type="text" id="FirstName" name="first_name" required
+                    value="<?php echo isset($existing_data['FirstName']) ? $existing_data['FirstName'] : ''; ?>"
+                    ><br>
+                </div>
+                <div class="Align">
+                    <label for="LastName">*Last Name:</label>
+                    <input class="IN"   type="text" id="LastName" name="last_name" required
+                    value="<?php echo isset($existing_data['LastName']) ? $existing_data['LastName'] : ''; ?>"
+                    ><br>
+                </div>
+
+                <div class="" style="margin-inline: 5%; display:flex;justify-content:flex-end;">
+                    
+                    <label for="Country">Country:</label>
+                        <select id="Country" name="country">
+                            <option value="india" <?php echo (isset($existing_data['Country']) && $existing_data['Country'] == 'india') ? 'selected' : ''; ?>>India</option>
+                            <option value="Pak" <?php echo (isset($existing_data['Country']) && $existing_data['Country'] == 'Pak') ? 'selected' : ''; ?>>Pakistan</option>
+                            <option value="Rus" <?php echo (isset($existing_data['Country']) && $existing_data['Country'] == 'Rus') ? 'selected' : ''; ?>>Russia</option>
+                            <option value="America" <?php echo (isset($existing_data['Country']) && $existing_data['Country'] == 'America') ? 'selected' : ''; ?>>America</option>
+                        </select>
+
+                </div>
+
+                <div class="Align">
+                    <label for="Mo_Nmber">*Mo. Number:</label>
+                    <input class="IN"   type="text" id="Mo_Nmber" name="phone_number" required
+                    value="<?php echo isset($existing_data['Mo_Nmber']) ? $existing_data['Mo_Nmber'] : ''; ?>"
+                    ><br>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <h3 class="B_T_3 Color_Red">Account Perticular</h3>
+    <br>
+    <br>
+    <br>
+    <div class="A_C">
+        <div class="User_info_Wrap">
+
+            <div class="personal_right">
+                <div class="Align">
+                    <label for="Ac_Num">*Ac_Num ( 15 digit ):</label>
+                    <input  class="IN"  type="text" id="Ac_Num" name="account_number" required
+                    value="<?php echo isset($existing_data['Ac_Num']) ? $existing_data['Ac_Num'] : ''; ?>"
+                    ><br>
+                </div>
+                
+                <div class="" style="margin-inline: 5%; display:flex;justify-content:flex-end;">
+                        
+                    <label for="FundTranf">FundTranf:</label>
+                        <select id="FundTranf" name="fund_transfer">
+                            <option value="one" <?php echo (isset($existing_data['FundTranf']) && $existing_data['FundTranf'] == 'one') ? 'selected' : ''; ?>>one</option>
+                            <option value="two" <?php echo (isset($existing_data['FundTranf']) && $existing_data['FundTranf'] == 'two') ? 'selected' : ''; ?>>two</option>
+                            <option value="three" <?php echo (isset($existing_data['FundTranf']) && $existing_data['FundTranf'] == 'three') ? 'selected' : ''; ?>>three</option>
+                            <option value="Four" <?php echo (isset($existing_data['FundTranf']) && $existing_data['FundTranf'] == 'Four') ? 'selected' : ''; ?>>four</option>
+                        </select>
+
+                </div>
+
+            </div>
+            <div class="personal_left">
+                <div class="Align">
+                    <label for="Niick_Name">*Niick Name:</label>
+                    <input  class="IN"  type="text" id="Niick_Name" name="nickname" required
+                    value="<?php echo isset($existing_data['Niick_Name']) ? $existing_data['Niick_Name'] : ''; ?>"
+                    ><br>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <center>
+        <button type="submit" value="submit">Submit</button>
+        <button type="reset" value="reset" id="RESET" onclick="Reset()">Reset</button>
+        <button type="button" onclick="showEditModal()">Edit</button>
+        <button type="submit" name="delete" value="delete">Delete All Data</button>
+    </center>
+</form>
+
+<!-- Modal for Edit -->
+<div class="modal" id="editModal">
+    <div class="modal-content">
+        <form action="" method="post" enctype="multipart/form-data">
+            <label for="editField">Select input to edit:</label>
+            <?php
+            $inputNames = array("name", "Password", "ComfermPassword", "Salutation", "MiddleName", "Ragident_Status", "email", "FirstName", "LastName", "Country", "Mo_Nmber", "Ac_Num", "Niick_Name", "FundTranf");
+
+            echo "<select id='editField' name='editField'>";
+            foreach ($inputNames as $name) {
+                echo "<option value='$name'>$name</option>";
+            }
+            echo "</select>";
+            ?>
+
+            <br>
+            <label for="editValue">Enter new value:</label>
+            <input type="text" id="editValue" name="editValue" required>
+            <br>
+            <button type="submit" name="editSubmit" class="modal-button">Submit</button>
+        </form>
+    </div>
+</div>
+
+    <br>
+    <br>
+    <br>
+
+    <h3 class="B_T_3 Color_Red">Decleration</h3>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla ea quaerat aperiam aspernatur, voluptate molestias
+        nisi voluptatibus ut perspiciatis rerum consequuntur asperiores modi, voluptatum ducimus, id similique eveniet
+        magnam dolore consequatur dolorem laborum totam. Corporis in nisi est voluptates, aut, repellat totam quasi nesciunt
+        illo doloribus aliquam voluptas adipisci? Autem laboriosam, voluptatem eligendi, nostrum fugiat provident modi nulla
+        mollitia delectus, facere adipisci! Vero ducimus sint ea molestiae libero eos praesentium saepe quasi voluptatum
+        earum deserunt placeat culpa obcaecati nisi quos ullam eius, blanditiis consectetur maxime possimus quaerat,
+        laboriosam alias dignissimos! Inventore voluptas sapiente aspernatur ad, enim odio illum similique aut.
+    </p>
+    <br>
+    <br>
+    <br>
+<!-- ---------------------------------------- JavaScript ------------------------------------------------ -->
+    <script>
+    let input = document.querySelectorAll(".IN");
+    let RESET = document.querySelector("#RESET");
+    let EDIT = document.createElement("button");
+    let modal = document.createElement("div");
+    let modalContent = document.createElement("div");
+
+    EDIT.innerText = "Edit";
+    EDIT.onclick = showEditModal;
+
+    // Additional styles for the modal
+    modal.className = "modal";
+    modalContent.className = "modal-content";
+
+    // Create the dropdown and submit button in the modal
+    function createModalContent() {
+        let inputNames = Array.from(input).map(input => input.name);
+        let dropdown = document.createElement("select");
+
+        inputNames.forEach(name => {
+            let option = document.createElement("option");
+            option.value = name;
+            option.text = name;
+            dropdown.add(option);
+        });
+
+        let submitButton = document.createElement("button");
+        submitButton.innerText = "Submit";
+        submitButton.className = "modal-button";
+        submitButton.onclick = function() {
+            handleModalSubmit(dropdown.value);
+        };
+
+        modalContent.innerHTML = "";
+        modalContent.appendChild(dropdown);
+        modalContent.appendChild(submitButton);
+    }
+
+    function Reset(){
+        for (let index = 0; index < input.length; index++) {
+            const E = input[index];
+            E.value = "";
+        }
+    }
+    function showEditModal() {
+        document.getElementById('editModal').style.display = "flex";
+    }
+
+    function handleModalSubmit(selectedInput) {
+        if (selectedInput) {
+            let selectedInputField = document.querySelector(`[name="${selectedInput.trim()}"]`);
+            
+            if (selectedInputField) {
+                selectedInputField.value = "";
+                selectedInputField.focus();
+            } else {
+                alert("Invalid input name");
+            }
+        }
+
+        // Close the modal after submit
+        modal.style.display = "none";
+    }
+
+    // Close the modal if the user clicks outside of it
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
+
+    RESET.insertAdjacentElement("afterend", EDIT);
+
+    // Append the modal to the body
+    document.body.appendChild(modal);
+    modal.appendChild(modalContent);
+</script>
+</body>
+</html>
+<!-- END - CODE -->
+
+
+ -->
 <!-- Create Hotel Room Booking System User can book room by 3 ways  -->
 <?php 
 // hotel_booking.php

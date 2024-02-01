@@ -55,3 +55,23 @@ Route::get('/login', [LoginController::class, 'index']);
     php artisan cache:clear
 
   -->
+   <!--Q - 8-->
+   <!--
+     create a new service provider : php artisan make:provider CustomMacrosServiceProvider
+     open this new file then add your custom macro in the boot
+     LIKE :- public function boot()
+    {
+        // Define the custom macro for searching users
+        User::macro('search', function ($query, $searchTerm) {
+            return $query->where('name', 'like', '%' . $searchTerm . '%')
+                         ->orWhere('email', 'like', '%' . $searchTerm . '%');
+            // You can customize this based on your user model fields
+        });
+    }
+    now in config/app.php add this file LIKe :-'providers' => [
+        // Other providers...
+        App\Providers\CustomMacrosServiceProvider::class,
+    ],
+    now you can use this LIKE :-  $users = User::search($searchTerm)->get();
+    
+    -->

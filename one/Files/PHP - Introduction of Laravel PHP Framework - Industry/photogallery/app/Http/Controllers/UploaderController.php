@@ -31,12 +31,12 @@ class UploaderController extends Controller
      */
     public function store(StoreuploaderRequest $request,uploader $uploader)
     {
-
         try {
             DB::beginTransaction();
             $data = [
                 "name"=>$request->name,
                 "email"=>$request->email,
+                "password"=>$request->password,
             ];
             $uploader::create($data);
             DB::commit();

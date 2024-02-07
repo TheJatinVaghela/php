@@ -30,10 +30,8 @@
             let url = "http://127.0.0.1:8000/api/uploader_register";
             jQuery.ajax({
                 url:url,
+                data:jQuery('#uploader_register').serialize(),
                 type: 'POST',
-                data:jQuery(this).serialize(),
-                proccessData:false,
-                contentType:false,
                 success:function(result){
                     result = JSON.parse(result);
                     console.log(result);

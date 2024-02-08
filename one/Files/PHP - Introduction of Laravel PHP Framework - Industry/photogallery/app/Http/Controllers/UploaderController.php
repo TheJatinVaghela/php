@@ -6,6 +6,7 @@ use App\Models\uploader;
 use App\Http\Requests\StoreuploaderRequest;
 use App\Http\Requests\UpdateuploaderRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UploaderController extends Controller
 {
@@ -14,7 +15,7 @@ class UploaderController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -31,12 +32,13 @@ class UploaderController extends Controller
      */
     public function store(StoreuploaderRequest $request,uploader $uploader)
     {
+        dd($request);
         try {
             DB::beginTransaction();
             $data = [
                 "name"=>$request->name,
                 "email"=>$request->email,
-                "password"=>$request->password,
+                "password"=>Hash::make($request->password),
             ];
             $uploader::create($data);
             DB::commit();
@@ -51,7 +53,7 @@ class UploaderController extends Controller
             $user = NULL;
             return response()->json(["data"=>NULL, "error"=>$th->getMessage(),"status"=>500]);
         };
-        return response()->json(["data"=>$user, "error"=>"success","status"=>200]);
+        return response()->json(["data"=>$data, "error"=>"success","status"=>200]);
     }
 
     /**

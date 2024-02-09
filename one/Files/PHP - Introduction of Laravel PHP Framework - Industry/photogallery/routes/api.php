@@ -20,7 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(UploaderController::class)->group(function(){
-    Route::post('/uploader_register','store')->name('uploader_register_api');
-});
+
+Route::post('/uploader_register',[UploaderController::class,'store'])->name('uploader_register_api');
 

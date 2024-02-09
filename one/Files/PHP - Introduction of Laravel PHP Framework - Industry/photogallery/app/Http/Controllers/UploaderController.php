@@ -32,7 +32,7 @@ class UploaderController extends Controller
      */
     public function store(StoreuploaderRequest $request,uploader $uploader)
     {
-        dd($request);
+        dd($uploader);
         try {
             DB::beginTransaction();
             $data = [

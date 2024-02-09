@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class uploader extends Model
 {
     use HasFactory;
-    public $table ='uploaders';
+    protected $table = 'uploaders';
     protected $fillable =[
         'name',
         'email',

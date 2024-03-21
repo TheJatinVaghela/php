@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->id();
+            $table->string('name',10);
+            $table->string('role',10)->default('member');
+            $table->string('email',15)->unique();
+            $table->integer('faltNumber',10)->unique();
+            $table->string('faltBlock',10);
+            $table->string('religion',10);
+            $table->string('password');
             $table->timestamps();
         });
     }

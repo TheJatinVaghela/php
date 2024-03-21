@@ -20,5 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::controller(MemberController::class)->group(function (){
-    route::post('/chackMemberLogin','');
+    Route::post('/chackMemberLogin','chackMember')->name('chackMemberLogin');
 });

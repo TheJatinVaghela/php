@@ -22,7 +22,7 @@ class MemberController extends Controller
     public function chackMember(Request $request , member $member){
         try {
             $request->validate([
-                'faltNumber'=>'required|numeric|integer',
+                'faltNumber'=>'required',
                 'password'=>'required',
             ]);
             $pass = Hash::make($request->password);

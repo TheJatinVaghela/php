@@ -1,7 +1,6 @@
 @include('headerView')
-@section('css')
-    <link rel="stylesheet" href="{{ asset('assets/login.css') }}">
-@endsection
+    <link rel="stylesheet" href="{{asset('assets/css/login.css')}}">
+
 <section> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span>
     <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span>
     <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span> <span></span>
@@ -38,13 +37,13 @@
 
     <div class="signin">
 
-        <form class="content">
-
+        <form class="content" enctype="multipart/form-data" method="POST" id="memberLoginForm">
+            @csrf
+            @method('POST')
             <h2>Sign In</h2>
 
-            <form class="form" enctype="multipart/form-data" method="POST" id="memberLoginForm">
-                @csrf
-                @method('POST')
+            <div class="form" >
+
                 <div class="inputBox">
 
                     <input type="number" name="faltNumber" required> <i>Falt Number</i>
@@ -60,7 +59,7 @@
 
                 </div>
 
-            </form>
+            </div>
 
             <div class="inputBox">
 
@@ -90,6 +89,7 @@
             let data = new FormData(this);
             let url = "{{route('chackMemberLogin')}}";
             let href = "{{route('home')}}";
+            console.log(data , url , href);
             validateAndSendData({
                 "faltNumber_error": function("input[name='faltNumber']", '3') {
                     var inputValue = $(inputSelector).val();

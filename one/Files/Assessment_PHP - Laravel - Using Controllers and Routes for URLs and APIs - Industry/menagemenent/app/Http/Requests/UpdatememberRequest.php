@@ -24,7 +24,7 @@ class UpdatememberRequest extends FormRequest
         return [
             'name' => 'required|string',
             'email' => 'required|unique:members,email|email',
-            'faltNumber' => 'required|numeric|integer|unique:members,faltNumber',
+            'faltNumber' => 'required|string|unique:members,faltNumber',
             'faltBlock' => 'required|string|unique:members,faltNumber',
             'religion' => 'required|string',
             'password'=>'required'

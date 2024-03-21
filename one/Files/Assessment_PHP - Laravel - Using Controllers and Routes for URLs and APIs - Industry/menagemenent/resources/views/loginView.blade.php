@@ -37,7 +37,7 @@
 
     <div class="signin">
 
-        <form class="content" enctype="multipart/form-data" method="POST" id="memberLoginForm">
+        <form class="content" action="" enctype="multipart/form-data" method="POST" id="memberLoginForm">
             @csrf
             @method('POST')
             <h2>Sign In</h2>
@@ -87,7 +87,6 @@
         $('#memberLoginForm').on('submit', function(e) {
             e.preventDefault();
             let data = new FormData(this);
-            let url = "{{route('chackMemberLogin')}}";
             let href = "{{route('home')}}";
             console.log(data , url , href);
             validateAndSendData({
@@ -110,7 +109,7 @@
 
             }, function() {
                 jQuery.ajax({
-                    url: url,
+                    url: {{route('chackMemberLogin')}},
                     data: data,
                     processData: false,
                     contentType: false,
